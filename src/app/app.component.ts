@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {EasyWebWorker} from "easy-web-worker";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angular-easy-web-worker';
+   constructor() {
+     this.run();
+   }
+
+   run() {
+     const w = new EasyWebWorker<string, string>((worker) => {
+       worker.onMessage((message) => {
+         message.resolve("hello");
+       });
+     });
+     w.send("")
+       .then(s => console.log(s))
+       .catch(e => console.error(e));
+   }
 }
